@@ -1,64 +1,85 @@
-import React, { Component } from "react";
-import PostForm from "./PostForm";
-import feedCollection from "../../collections/feed";
-import { Redirect } from "react-router-dom";
-
-
+import React, { Component } from 'react';
+import PostForm from './PostForm';
+import feedCollection from '../../collections/feed';
+import { toast } from 'react-toastify';
 
 class PostFormContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      validTitle: undefined,
-      validAuthor: undefined,
-      validBody: undefined
-    }
-  }
-  handleSubmit = (event) => {
-    event.preventDefault();
-    let post = {
-      author: event.currentTarget.author.value,
-      title: event.currentTarget.title.value,
-      body: event.currentTarget.body.value
-    };
+	constructor(props) {
+		super(props);
+		this.state = {
+			posts: [],
+			id: '',
+			title: '',
+			body: '',
+			titleValid: false,
+			bodyValid: false,
+			formValid: false
+		};
+	}
 
-    feedCollection.insert(post);
-    this.props.history.push('/feed');
-  }
+	handleSubmit = async (event) => {
+		event.preventDefault();
+		const postsString = localStorage.getItem('posts');
+		const posts = postsString ? JSON.parse(postsString) : [];
+		await this.setState({
+			posts: {
+				id: posts.length + 1,
+				title: this.state.title,
+				body: this.state.body
+			}
+		});
+		await posts.push(this.state.posts);
+		await localStorage.setItem('posts', [ JSON.stringify(posts) ]);
+		await this.setState({ id: '', body: '', title: '' });
+		await feedCollection.insert(this.state.posts);
+		this.props.history.push('/');
+		toast.success('Post has been added');
+	};
 
+	handleChange = (e) => {
+		const { name, value } = e.target;
+		this.setState({ [name]: value }, () => this.validateField(name, value));
+	};
 
-  onChangeAuthor = (e) => {
-    this.setState({
-      validAuthor: ((t = e.currentTarget.value) => (
-        (t.length > 2) //length must be longer than 2
-        && (t.charAt(0).toUpperCase() === t.charAt(0)) //first char must be capital
-        && (t.length < 30) //length must be shorter than 30
-      ))()
-    })
-  }
-  onChangeBody = (e) => {
-    this.setState({
-      validBody: ((t = e.currentTarget.value) => (
-        (t.length > 5) //length must be longer than 2
-        && (t.charAt(0).toUpperCase() === t.charAt(0)) //first char must be capital
-        && (t.length < 1000) //length must be shorter than 20
-      ))()
-    })
-  }
-  onChangeTitle = (e) => {
-    this.setState({
-      validTitle: ((t = e.currentTarget.value) => (
-        (t.length > 2) //length must be longer than 2
-        && (t.charAt(0).toUpperCase() === t.charAt(0)) //first char must be capital
-        && (t.length < 30) //length must be shorter than 30
-      ))()
-    })
-  }
-  render() {
-    return <PostForm onChangeAuthor={this.onChangeAuthor} onChangeTitle={this.onChangeTitle} onChangeBody={this.onChangeBody}
-      handleSubmit={this.handleSubmit} validTitle={this.state.validTitle} validAuthor={this.state.validAuthor}
-      validBody={this.state.validBody} {...this.props} />;
-  }
+	validateField(fieldName, value) {
+		let titleValid = this.state.titleValid;
+		let bodyValid = this.state.bodyValid;
+
+		switch (fieldName) {
+			case 'title':
+				titleValid = value.length >= 3;
+				break;
+			case 'body':
+				bodyValid = value.length >= 3;
+				break;
+			default:
+				break;
+		}
+		this.setState(
+			{
+				titleValid,
+				bodyValid
+			},
+			this.validateForm
+		);
+	}
+
+	validateForm() {
+		this.setState({
+			formValid: this.state.titleValid && this.state.bodyValid
+		});
+	}
+
+	render() {
+		return (
+			<PostForm
+				handleChange={this.handleChange}
+				handleSubmit={this.handleSubmit}
+				formValid={this.state.formValid}
+				{...this.props}
+			/>
+		);
+	}
 }
 
 export default PostFormContainer;
