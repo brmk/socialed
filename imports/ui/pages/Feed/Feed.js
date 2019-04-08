@@ -1,18 +1,20 @@
 import React from "react";
 import { Post } from "../../components";
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button,Container } from 'reactstrap';
 
-const Feed = ({ posts, redirect }) => {
+const Feed = ({ posts }) => {
   return (
     <div>
-      <Button onClick={redirect}>
+      <Container className="text-center">
         <Link to="/new">
-          New Post +
+          <Button size="lg">
+            New Post +
+          </Button>
         </Link>
-      </Button>
+      </Container>
       {posts.map(post => (
-        <Post {...post} key={post.id} />
+        <Post {...post} key={post._id} />
       ))}
     </div>
   );
