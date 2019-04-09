@@ -30,7 +30,11 @@ class FeedContainer extends Component {
 
 export default withTracker(props => {
   const handler = Meteor.subscribe('posts');
-  const posts = PostsCollection.find().fetch();
+  const handler1 = Meteor.subscribe('profiles');
+  const posts = PostsCollection.find().fetch().map(x => ({
+    ...x,
+    userName: Meteor.users.find(x.userId).fetch()[0].profile.fullName
+  }));
   return {
     posts,
     user: Meteor.user(),
