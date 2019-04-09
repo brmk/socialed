@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import { Card, CardBody, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 const SignUp = ({ onSubmit, email, password, confirmPassword, fullName, onChange, isLogin }) => (
@@ -57,6 +58,18 @@ const SignUp = ({ onSubmit, email, password, confirmPassword, fullName, onChange
           { isLogin ? 'Login' : 'Register' }
         </Button>
       </Form>
+        { isLogin ? 
+          <div>
+            New?
+            <Link to="/register"> Register</Link> 
+          </div>
+        : 
+          <div>
+            Are you have acount?
+            <Link to="/login"> Login</Link>
+          </div>
+            }
+
     </CardBody>
   </Card>
 );
