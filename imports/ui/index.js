@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles.css';
 
 export default function App() {
+<<<<<<< HEAD
 	return (
 		<AppLayout>
 			<Router>
@@ -31,4 +32,23 @@ export default function App() {
 			<ToastContainer />
 		</AppLayout>
 	);
+=======
+  return (
+    <Router>
+      <AppLayout>
+          <Switch>
+            <Route path="/" exact component={Feed} />
+            <Route path="/profile" exact component={Profile} />
+            <Route path="/new" exact component={PostForm} />
+            {/* <Route path="/login" exact component={SignIn} /> */}
+            <Route path="/register" exact render={(props) => <SignUp {...props} isLogin={false} />}  />
+            <Route path="/login" exact render={(props) => <SignUp {...props} isLogin />} />
+            <Redirect from="/feed" to="/" />
+            <Route component={NotFound} />
+          </Switch>
+        <ToastContainer />
+      </AppLayout>
+    </Router>
+  );
+>>>>>>> 538bdcfb790a0548b72961330cb763a562e47b32
 }

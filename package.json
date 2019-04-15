@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.3",
     "bootstrap": "^4.3.1",
+    "faker": "^4.1.0",
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
     "meteor-node-stubs": "^0.4.1",
@@ -19,7 +20,11 @@
     "react-router-dom": "^5.0.0",
     "react-toastify": "^5.0.0-rc.6",
     "reactstrap": "^7.1.0",
+<<<<<<< HEAD
     "uuid": "^3.3.2"
+=======
+    "recompose": "^0.30.0"
+>>>>>>> 538bdcfb790a0548b72961330cb763a562e47b32
   },
   "meteor": {
     "mainModule": {
