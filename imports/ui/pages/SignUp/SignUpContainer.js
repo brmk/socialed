@@ -8,23 +8,13 @@ import { Meteor } from 'meteor/meteor';
 const EMAIL_VALIDATOR = Joi.string().email({ minDomainAtoms: 2 }).required();
 const PASSWORD_VALIDATOR = Joi.string().min(6).max(20).required();
 
-<<<<<<< HEAD
-export default class SignUpContainer extends Component {
+class SignUpContainer extends Component {
 	state = {
 		email: '',
 		password: '',
 		confirmPassword: '',
 		fullName: ''
 	};
-=======
-class SignUpContainer extends Component {
-  state = {
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
-  }
->>>>>>> 538bdcfb790a0548b72961330cb763a562e47b32
 
 	onSubmit = (e) => {
 		e.preventDefault();
@@ -103,9 +93,9 @@ class SignUpContainer extends Component {
 		});
 	};
 
-<<<<<<< HEAD
 	render() {
 		const { email, password, confirmPassword, fullName } = this.state;
+
 		return (
 			<SignUp
 				onSubmit={this.onSubmit}
@@ -119,23 +109,5 @@ class SignUpContainer extends Component {
 		);
 	}
 }
-=======
-  render() {
-    const { email, password, confirmPassword, fullName } = this.state;
-
-    return (
-      <SignUp
-        onSubmit={this.onSubmit}
-        onChange={this.onChange}
-        email={email}
-        password={password}
-        confirmPassword={confirmPassword}
-        fullName={fullName}
-        {...this.props}
-      />
-    );
-  }
-}
 
 export default SignUpContainer;
->>>>>>> 538bdcfb790a0548b72961330cb763a562e47b32
