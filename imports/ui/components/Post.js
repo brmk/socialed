@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardText, CardBody, Button } from 'reactstrap';
+import { Card, CardHeader, CardText, CardBody, Button, CardSubtitle } from 'reactstrap';
 
 const Post = ({ userId, body, createdAt, id, author }) => (
 	<Card className="mb-4" id={id}>

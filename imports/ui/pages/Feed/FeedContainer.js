@@ -11,21 +11,11 @@ class FeedContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			postsCount: 0
+			postsCount: 0,
+			scrolling: false,
+			pageNumber: page.get()
 		};
 	}
-	redirect = () => {
-		console.log(this.props);
-	};
-
-	changePage = (adder) => {
-		const { postsCount } = this.state;
-		const pageCount = page.get();
-		const nextPage = pageCount + adder;
-		if (nextPage < 1) return;
-		if (nextPage > Math.ceil(postsCount / 10)) return;
-		page.set(pageCount + adder);
-	};
 
 	componentDidMount() {
 		setInterval(() => {
@@ -33,8 +23,48 @@ class FeedContainer extends Component {
 				if (err) console.log(err);
 				this.setState({ postsCount: res });
 			});
-		}, 10000);
+		}, 1000);
+		this.scrollListener = window.addEventListener('scroll', (event) => {
+			this.handleScroll(event);
+		});
 	}
+
+	redirect = () => {
+		console.log(this.props);
+	};
+
+	handleScroll = (event) => {
+		const { postsCount, scrolling, pageNumber } = this.state;
+		if (scrolling) return;
+		if (pageNumber >= postsCount / 10) return;
+
+		const lastPost = document.querySelector('#postsList > div:last-child');
+		if (!lastPost) return;
+		const lastPostOffset = lastPost.offsetTop + lastPost.clientHeight;
+		const pageOffset = window.pageYOffset + window.innerHeight;
+		let bottomOffset = 0;
+		if (pageOffset > lastPostOffset - bottomOffset) {
+			this.loadMore();
+		}
+	};
+
+	loadPage = () => {
+		const { pageNumber } = this.state;
+		Meteor.subscribe('posts', pageNumber);
+		console.log(pageNumber);
+		page.set(pageNumber);
+		this.setState({ scrolling: false });
+	};
+
+	loadMore = () => {
+		this.setState(
+			(prevState) => ({
+				pageNumber: prevState.pageNumber + 1,
+				scrolling: true
+			}),
+			this.loadPage
+		);
+	};
 
 	render() {
 		const { loading, isLoggedIn } = this.props;
@@ -50,7 +80,7 @@ class FeedContainer extends Component {
 				{...this.props}
 				redirect={this.redirect}
 				page={page.get()}
-				changePage={this.changePage}
+				changePage={this.loadPage}
 				postsCount={postsCount}
 			/>
 		);
@@ -70,7 +100,7 @@ export default withTracker((props) => {
 	return {
 		posts: postsWithUsers,
 		user: Meteor.user(),
-		loading: Meteor.loggingIn() || handlers.some((h) => !h.ready()),
+		loading: Meteor.loggingIn(), // || handlers.some((h) => !h.ready()),
 		isLoggedIn: !Meteor.loggingIn() && Meteor.userId()
 	};
 })(FeedContainer);

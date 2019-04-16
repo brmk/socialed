@@ -10,14 +10,13 @@ const Feed = ({ posts, redirect, loading, page, postsCount, changePage }) => {
 			<Button onClick={redirect}>
 				<Link to="/new">New Post +</Link>
 			</Button>
-			<Button onClick={() => changePage(-1)}>Prev Page</Button>
-			<Button onClick={() => changePage(1)}>Next Page</Button>
 			<Card>
 				<CardHeader>
 					Page:{page} Count:{postsCount}
 				</CardHeader>
-				<CardBody>{posts.map((post) => <Post {...post} key={post._id} />)}</CardBody>
+				<CardBody id="postsList">{posts.map((post) => <Post {...post} key={post._id} />)}</CardBody>
 			</Card>
+			<Button onClick={() => scroll(0, 0)}>Up</Button>
 		</div>
 	);
 };

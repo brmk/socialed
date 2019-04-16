@@ -7,13 +7,6 @@ const PostForm = (props) => (
 			<FormGroup>
 				<Label for="bodyInput">Message</Label>
 				<Input
-					invalid={
-						isUndefined(props.validBody) ? (
-							undefined /* For neutral color of form before first onChange */
-						) : (
-							!props.validBody
-						)
-					}
 					valid={props.validBody}
 					type="textarea"
 					name="body"

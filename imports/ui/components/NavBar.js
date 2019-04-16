@@ -34,7 +34,6 @@ class NavBar extends React.Component {
 		});
 	}
 	render() {
-		console.log(this.props);
 		return (
 			<Navbar color="light" light expand="md">
 				<Container>
