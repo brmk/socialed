@@ -1,5 +1,5 @@
-import Collection from "../models/Collection";
+import Collection from '../models/Collection';
 
-const feedCollection = new Collection("feed");
+const feedCollection = new Collection('feed');
 
 export default feedCollection;

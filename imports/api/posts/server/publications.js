@@ -13,7 +13,7 @@ publishComposite('posts', function(page) {
 						createdAt: -1
 					},
 					limit: 10,
-					skip: (page - 1) * 5
+					skip: (page - 1) * 10
 				}
 			);
 		},
