@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import faker from 'faker';
 import PostsCollection from '../collection';
-import Posts from '../collection';
 
 Meteor.methods({
 	'posts.insert': function({ body }) {
@@ -54,16 +53,27 @@ Meteor.methods({
 				createdAt: faker.date.recent()
 			});
 		}
-	},
-	'posts.checkedAuthors'(authors) {
-		if (!this.userId) {
-			throw Meteor.Error('Not authorized');
-		}
-		const posts = [];
-		authors.map((authorId) => {
-			posts.push(PostsCollection.find({ userId: authorId }).fetch());
-		});
-
-		return posts;
 	}
+	// 'posts.checkedAuthors'(authors, page) {
+	// 	if (!this.userId) {
+	// 		throw Meteor.Error('Not authorized');
+	// 	}
+	// 	const posts = [];
+	// 	authors.map((authorId) => {
+	// 		posts.push(
+	// 			PostsCollection.find(
+	// 				{ userId: authorId },
+	// 				{
+	// 					sort: {
+	// 						createdAt: -1
+	// 					},
+	// 					limit: 10,
+	// 					skip: (page - 1) * 10
+	// 				}
+	// 			).fetch()
+	// 		);
+	// 	});
+
+	// 	return posts;
+	// }
 });

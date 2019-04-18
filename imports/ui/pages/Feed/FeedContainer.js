@@ -41,7 +41,6 @@ class FeedContainer extends Component {
 		const { postsCount, scrolling, pageNumber } = this.state;
 		if (scrolling) return;
 		if (pageNumber >= postsCount / 10) return;
-
 		const lastPost = document.querySelector('#postsList > div:last-child');
 		if (!lastPost) return;
 		const lastPostOffset = lastPost.offsetTop + lastPost.clientHeight;
@@ -54,11 +53,13 @@ class FeedContainer extends Component {
 	};
 
 	loadPage = () => {
-		const { pageNumber } = this.state;
-		Meteor.subscribe('posts', pageNumber);
-		console.log(pageNumber);
-		page.set(pageNumber);
-		this.setState({ scrolling: false });
+		const { pageNumber, checkedAuthors } = this.state;
+		setTimeout(() => {
+			Meteor.subscribe('posts', page.get());
+			console.log('page number: ', pageNumber);
+			page.set(pageNumber);
+			this.setState({ scrolling: false });
+		}, 300);
 	};
 
 	loadMore = () => {
@@ -79,11 +80,7 @@ class FeedContainer extends Component {
 		} else {
 			checkedAuthors.push(authorId);
 		}
-		this.setState({ checkedAuthors });
-		Meteor.call('posts.checkedAuthors', checkedAuthors, (err, res) => {
-			if (err) console.log(err);
-			this.setState({ posts: res });
-		});
+		this.setState({ checkedAuthors } /* this.loadData */);
 	};
 
 	render() {
@@ -100,7 +97,7 @@ class FeedContainer extends Component {
 			<div>
 				<Authors users={this.props.users} handleCheck={this.handleCheck} />
 				<Feed
-					posts={posts}
+					posts={this.props.posts}
 					//{...this.props}
 					redirect={this.redirect}
 					page={page.get()}
@@ -116,7 +113,7 @@ export default withTracker((props) => {
 	const posts = PostsCollection.find().fetch();
 	const users = Meteor.users.find().fetch();
 	const pageCount = page.get();
-	// const handlers = [ Meteor.subscribe('posts', page.get()) ];
+	const handlers = [ Meteor.subscribe('posts', page.get()) ];
 
 	const postsWithUsers = posts.map((p) => {
 		const user = Meteor.users.findOne(p.userId);

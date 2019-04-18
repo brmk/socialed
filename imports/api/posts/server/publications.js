@@ -32,3 +32,25 @@ publishComposite('posts', function(page) {
 		]
 	};
 });
+
+// publishComposite('posts.checkedAuthors', function(authors, page) {
+// 	if (!this.userId) return this.ready();
+// 	const posts = [];
+// 	console.log('publish');
+// 	authors.map((authorId) => {
+// 		posts.push(
+// 			PostsCollection.find(
+// 				{ userId: authorId },
+// 				{
+// 					sort: {
+// 						createdAt: -1
+// 					},
+// 					limit: 10,
+// 					skip: (page - 1) * 10
+// 				}
+// 			).fetch()
+// 		);
+// 	});
+
+// 	return posts;
+// });
