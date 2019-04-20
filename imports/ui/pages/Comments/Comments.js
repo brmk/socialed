@@ -1,7 +1,7 @@
 import React from 'react';
-import Comments from '../../../api/comments/collection';
+import moment from 'moment';
 
-const Comment = ({ handleTyping, handleSubmit, comments, postId }) => {
+const Comment = ({ handleTyping, handleSubmit, comments }) => {
 	return (
 		<div>
 			{comments.length > 0 ? (
@@ -9,10 +9,13 @@ const Comment = ({ handleTyping, handleSubmit, comments, postId }) => {
 					<div key={index}>
 						<p>
 							<b>
-								{comment.userId}
+								{comment.commentator || comment.userId}
 								{': '}
 							</b>
-							{comment.message}
+							{comment.message} {'  '}
+							<p>
+								<i color="text-muted">{moment(comment.createdAt).fromNow()}</i>
+							</p>
 						</p>
 					</div>
 				))

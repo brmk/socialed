@@ -23,7 +23,7 @@ const Feed = ({ posts, redirect, loading, page, postsCount, changePage, selected
 						<Card key={index}>
 							<CardBody>
 								<Post {...post} key={post._id} />
-								<Comments key={uuid()} postId={post._id} />
+								<Comments key={uuid()} currentPostId={post._id} />
 							</CardBody>
 						</Card>
 					))}

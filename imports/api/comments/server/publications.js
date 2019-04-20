@@ -10,7 +10,7 @@ publishComposite('comments', function() {
 				{},
 				{
 					sort: {
-						createdAt: -1
+						createdAt: 1
 					}
 				}
 			);
@@ -26,7 +26,7 @@ publishComposite('commentsForPost', function(post) {
 				{ postId: post },
 				{
 					sort: {
-						createdAt: -1
+						createdAt: 1
 					}
 				}
 			);

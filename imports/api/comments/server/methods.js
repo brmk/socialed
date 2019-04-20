@@ -10,7 +10,7 @@ Meteor.methods({
 		}
 		const { message, postId } = comment;
 
-		if (typeof message !== 'string' || message.length <= 3) {
+		if (typeof message !== 'string' || message.length < 3) {
 			throw Meteor.Error('Comment should be longer than 3 characters');
 		}
 

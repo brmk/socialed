@@ -5,6 +5,7 @@ import Comments from './Comments';
 import { toast } from 'react-toastify';
 import CommentsCollection from '/imports/api/comments/collection';
 import { withTracker } from 'meteor/react-meteor-data';
+import { compose, withState } from 'recompose';
 
 class CommentsContainer extends Component {
 	constructor(props) {
@@ -15,19 +16,12 @@ class CommentsContainer extends Component {
 		};
 	}
 
-	componentWillMount = () => {
-		let commentsOfPost = [];
-		Meteor.subscribe('commentsForPost', this.props.postId);
-		commentsOfPost = [ ...CommentsCollection.find({ postId: this.props.postId }).fetch() ];
-		this.setState({ comments: commentsOfPost });
-	};
-
 	handleSubmit = (event) => {
 		event.preventDefault();
 
 		let comment = {
 			message: this.state.newComment.message,
-			postId: this.props.postId
+			postId: this.props.currentPostId
 		};
 		if (comment.message.length < 3) return toast.error(`Comment should be at least 3 characters long`);
 		Meteor.call('comments.insert', comment, (error) => {
@@ -52,8 +46,7 @@ class CommentsContainer extends Component {
 	render() {
 		return (
 			<Comments
-				comments={this.state.comments}
-				postId={this.props.postId}
+				comments={this.props.comments}
 				handleTyping={this.handleTyping}
 				handleSubmit={this.handleSubmit}
 			/>
@@ -61,19 +54,23 @@ class CommentsContainer extends Component {
 	}
 }
 
-export default withTracker((props) => {
-	//const comments = CommentsCollection.find().fetch();
-	const handlers = [ Meteor.subscribe('comments') ];
+export default compose(
+	withState('postID', 'setPostID', ''),
+	withTracker((props) => {
+		const { currentPostId } = props;
 
-	// const postsWithUsers = posts.map((p) => {
-	// 	const user = Meteor.users.findOne(p.userId);
-	// 	return { ...p, author: user };
-	// });
+		const handlers = [ Meteor.subscribe('commentsForPost', currentPostId) ];
+		const comments = CommentsCollection.find({ postId: currentPostId }).fetch();
+		const commentsWithUsers = comments.map((c) => {
+			const user = Meteor.users.findOne(c.userId);
+			return { ...c, commentator: user.profile.fullName };
+		});
 
-	return {
-		//comments, //: postsWithUsers,
-		user: Meteor.user(),
-		loading: Meteor.loggingIn(), // || handlers.some((h) => !h.ready()),
-		isLoggedIn: !Meteor.loggingIn() && Meteor.userId()
-	};
-})(CommentsContainer);
+		return {
+			comments: commentsWithUsers,
+			user: Meteor.user(),
+			loading: Meteor.loggingIn() || handlers.some((h) => !h.ready()),
+			isLoggedIn: !Meteor.loggingIn() && Meteor.userId()
+		};
+	})
+)(CommentsContainer);
