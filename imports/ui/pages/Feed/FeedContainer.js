@@ -1,36 +1,40 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { ReactiveVar } from 'meteor/reactive-var';
 import Feed from './Feed';
 import PostsCollection from '/imports/api/posts/collection';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Redirect } from 'react-router-dom';
-import Authors from '../Authors';
+import { compose, withState } from 'recompose';
 
-const page = new ReactiveVar(1);
+const POSTS_PER_PAGE = 10;
 class FeedContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			postsCount: 0,
-			scrolling: false,
-			pageNumber: page.get(),
-			checkedAuthors: [],
-			posts: []
+			scrolling: false
 		};
 	}
 
+	fetchPostsCount = _.debounce(() => {
+		const { selectedUsers } = this.props;
+		Meteor.call('posts.count', { selectedUsers }, (err, res) => {
+			if (err) console.log(err);
+			this.setState({ postsCount: res });
+		});
+	}, 500);
+
 	componentDidMount() {
-		setTimeout(() => {
-			Meteor.call('posts.count', (err, res) => {
-				if (err) console.log(err);
-				this.setState({ postsCount: res });
-			});
-		}, 1000);
+		this.fetchPostsCount();
 		this.scrollListener = window.addEventListener('scroll', (event) => {
 			this.handleScroll(event);
 		});
-		this.loadPage();
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (!_.isEqual(this.props.selectedUsers, prevProps.selectedUsers)) {
+			this.fetchPostsCount();
+		}
 	}
 
 	redirect = () => {
@@ -38,9 +42,11 @@ class FeedContainer extends Component {
 	};
 
 	handleScroll = (event) => {
-		const { postsCount, scrolling, pageNumber } = this.state;
+		const { postsCount, scrolling } = this.state;
+		const { page } = this.props;
+		const currentPage = page;
 		if (scrolling) return;
-		if (pageNumber >= postsCount / 10) return;
+		if (currentPage > Math.ceil(postsCount / POSTS_PER_PAGE)) return;
 		const lastPost = document.querySelector('#postsList > div:last-child');
 		if (!lastPost) return;
 		const lastPostOffset = lastPost.offsetTop + lastPost.clientHeight;
@@ -53,35 +59,17 @@ class FeedContainer extends Component {
 	};
 
 	loadPage = () => {
-		const { pageNumber, checkedAuthors } = this.state;
-		setTimeout(() => {
-			Meteor.subscribe('posts', page.get());
-			console.log('page number: ', pageNumber);
-			page.set(pageNumber);
-			this.setState({ scrolling: false });
-		}, 300);
+		const { page, setPage, selectedUsers } = this.props;
+		Meteor.subscribe('posts', { page, selectedUsers });
+		setPage(page + 1);
+		console.log('page number: ', page);
+		this.setState({ scrolling: false });
 	};
 
-	loadMore = () => {
-		this.setState(
-			(prevState) => ({
-				pageNumber: prevState.pageNumber + 1,
-				scrolling: true
-			}),
-			this.loadPage
-		);
-	};
-
-	handleCheck = (e) => {
-		const authorId = e.target.value;
-		let checkedAuthors = [ ...this.state.checkedAuthors ];
-		if (checkedAuthors.includes(authorId)) {
-			_.remove(checkedAuthors, (author) => author == authorId);
-		} else {
-			checkedAuthors.push(authorId);
-		}
-		this.setState({ checkedAuthors } /* this.loadData */);
-	};
+	loadMore = _.throttle(() => {
+		//const { loadPage } = this;
+		this.loadPage();
+	}, 1000);
 
 	render() {
 		const { loading, isLoggedIn } = this.props;
@@ -93,38 +81,40 @@ class FeedContainer extends Component {
 			return <Redirect to="/login" />;
 		}
 		const posts = _.flatten(this.state.posts);
-		return (
-			<div>
-				<Authors users={this.props.users} handleCheck={this.handleCheck} />
-				<Feed
-					posts={this.props.posts}
-					//{...this.props}
-					redirect={this.redirect}
-					page={page.get()}
-					changePage={this.loadPage}
-					postsCount={posts.length}
-				/>
-			</div>
-		);
+		return <Feed {...this.props} redirect={this.redirect} changePage={this.loadPage} postsCount={postsCount} />;
 	}
 }
 
-export default withTracker((props) => {
-	const posts = PostsCollection.find().fetch();
-	const users = Meteor.users.find().fetch();
-	const pageCount = page.get();
-	const handlers = [ Meteor.subscribe('posts', page.get()) ];
+export default compose(
+	withState('isInitialLoading', 'setIsInitialLoading', true),
+	withState('selectedUsers', 'setSelectedUsers', []),
+	withState('page', 'setPage', 1),
+	withTracker((props) => {
+		const { page, selectedUsers, isInitialLoading, setIsInitialLoading } = props;
 
-	const postsWithUsers = posts.map((p) => {
-		const user = Meteor.users.findOne(p.userId);
-		return { ...p, author: user };
-	});
+		const handlers = [ Meteor.subscribe('posts', { page, selectedUsers }) ];
 
-	return {
-		posts: postsWithUsers,
-		users,
-		user: Meteor.user(),
-		loading: Meteor.loggingIn(), // || handlers.some((h) => !h.ready()),
-		isLoggedIn: !Meteor.loggingIn() && Meteor.userId()
-	};
-})(FeedContainer);
+		const posts = PostsCollection.find().fetch();
+
+		const postsWithUsers = posts.map((p) => {
+			const user = Meteor.users.findOne(p.userId);
+			return { ...p, author: user };
+		});
+
+		let loading = Meteor.loggingIn() || handlers.some((h) => !h.ready());
+		if (!isInitialLoading) {
+			loading = false;
+		} else {
+			if (!loading) {
+				setIsInitialLoading(false);
+			}
+		}
+
+		return {
+			posts: postsWithUsers,
+			user: Meteor.user(),
+			loading,
+			isLoggedIn: !Meteor.loggingIn() && Meteor.userId()
+		};
+	})
+)(FeedContainer);

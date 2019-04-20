@@ -4,15 +4,16 @@ import { Link } from 'react-router-dom';
 import { Button, Card, CardHeader, CardBody, CardFooter } from 'reactstrap';
 import Comments from '../Comments';
 import uuid from 'uuid';
+import UsersFilter from './components/UsersFilter';
 
-const Feed = ({ posts, redirect, loading, page, postsCount, changePage }) => {
+const Feed = ({ posts, redirect, loading, page, postsCount, changePage, selectedUsers, setSelectedUsers }) => {
 	// if (loading) return <h1>...Loading</h1>
-
 	return (
 		<div>
 			<Button onClick={redirect}>
 				<Link to="/new">New Post +</Link>
 			</Button>
+			<UsersFilter selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
 			<Card>
 				<CardHeader>
 					Page:{page} Count:{postsCount}

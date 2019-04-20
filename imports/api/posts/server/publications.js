@@ -2,12 +2,14 @@ import { Meteor } from 'meteor/meteor';
 import { publishComposite } from 'meteor/reywood:publish-composite';
 import PostsCollection from '../collection';
 
-publishComposite('posts', function(page) {
+publishComposite('posts', function({ page, selectedUsers }) {
 	if (!this.userId) return this.ready();
 	return {
 		find() {
 			return PostsCollection.find(
-				{},
+				{
+					...(selectedUsers.length ? { userId: { $in: selectedUsers } } : {})
+				},
 				{
 					sort: {
 						createdAt: -1
@@ -20,37 +22,9 @@ publishComposite('posts', function(page) {
 		children: [
 			{
 				find(post) {
-					return Meteor.users.find(post.userId);
+					return Meteor.users.find(post.userId, { fields: { 'profile.fullName': 1 } });
 				}
 			}
-			// {
-			//   find(post){
-			//     return customElements.find({postId: post._id})
-			//   },
-
-			// }
 		]
 	};
 });
-
-// publishComposite('posts.checkedAuthors', function(authors, page) {
-// 	if (!this.userId) return this.ready();
-// 	const posts = [];
-// 	console.log('publish');
-// 	authors.map((authorId) => {
-// 		posts.push(
-// 			PostsCollection.find(
-// 				{ userId: authorId },
-// 				{
-// 					sort: {
-// 						createdAt: -1
-// 					},
-// 					limit: 10,
-// 					skip: (page - 1) * 10
-// 				}
-// 			).fetch()
-// 		);
-// 	});
-
-// 	return posts;
-// });
