@@ -20,7 +20,6 @@ class UsersFilter extends Component {
 			usersSet.delete(_id);
 		}
 		setSelectedUsers([ ...usersSet ]);
-		console.log(this.props.users);
 	};
 
 	render() {
