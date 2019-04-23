@@ -43,12 +43,26 @@ class CommentsContainer extends Component {
 		});
 	};
 
+	deleteComment = (comment) => {
+		console.log(comment);
+		if (Meteor.userId() === comment.userId) {
+			Meteor.call('comments.remove', comment._id, (error) => {
+				if (error) {
+					toast.error(`Comment removing error: ${error.message}`);
+				} else {
+					toast.success('Comment removed');
+				}
+			});
+		}
+	};
+
 	render() {
 		return (
 			<Comments
 				comments={this.props.comments}
 				handleTyping={this.handleTyping}
 				handleSubmit={this.handleSubmit}
+				deleteComment={this.deleteComment}
 			/>
 		);
 	}

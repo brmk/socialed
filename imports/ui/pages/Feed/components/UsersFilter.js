@@ -20,6 +20,7 @@ class UsersFilter extends Component {
 			usersSet.delete(_id);
 		}
 		setSelectedUsers([ ...usersSet ]);
+		console.log(this.props.users);
 	};
 
 	render() {
@@ -28,13 +29,13 @@ class UsersFilter extends Component {
 			<div>
 				{users.map(({ _id, profile: { fullName } }) => (
 					<FormGroup check key={_id}>
-						<Label check>
+						<Label check className="m-1">
 							<Input
 								type="checkbox"
 								value={_id}
 								checked={selectedUsers.includes(_id)}
 								onChange={(e) => this.onChange(_id, e.target.checked)}
-							/>{' '}
+							/>
 							{fullName}
 						</Label>
 					</FormGroup>
@@ -46,7 +47,7 @@ class UsersFilter extends Component {
 
 export default compose(
 	withTracker((props) => {
-		const handles = [ Meteor.subscribe('users.list') ];
+		const handlers = [ Meteor.subscribe('users.list') ];
 
 		return {
 			users: Meteor.users.find({}, { sort: { 'profile.fullName': 1 } }).fetch()

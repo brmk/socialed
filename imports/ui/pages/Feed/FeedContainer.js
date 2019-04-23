@@ -67,7 +67,6 @@ class FeedContainer extends Component {
 	};
 
 	loadMore = _.throttle(() => {
-		//const { loadPage } = this;
 		this.loadPage();
 	}, 1000);
 

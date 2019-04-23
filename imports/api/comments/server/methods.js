@@ -37,10 +37,14 @@ Meteor.methods({
 			throw Meteor.Error('Not authorized');
 		}
 
-		if (!Meteor.users.findOne(this.userId).isAdmin) {
-			throw Meteor.Error('Access Denied!');
+		CommentsCollection.remove({ _id: id });
+	},
+	'comments.remove'(id) {
+		if (!this.userId) {
+			throw Meteor.Error('Not authorized');
 		}
-		CommentsCollection.remove({});
+
+		CommentsCollection.remove({ _id: id });
 	},
 
 	'comments.populate'(number = 10) {
