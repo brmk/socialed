@@ -47,7 +47,7 @@ class UsersFilter extends Component {
 
 export default compose(
 	withTracker((props) => {
-		const handlers = [ Meteor.subscribe('users.list') ];
+		const handlers = [ Meteor.subscribe('usersList') ];
 
 		return {
 			users: Meteor.users.find({}, { sort: { 'profile.fullName': 1 } }).fetch()
