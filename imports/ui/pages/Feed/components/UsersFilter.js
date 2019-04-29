@@ -3,9 +3,19 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { compose } from 'recompose';
 import { withTracker } from 'meteor/react-meteor-data';
-import { FormGroup, Label, Input } from 'reactstrap';
+import { FormGroup, Label, Input, Collapse, Button } from 'reactstrap';
 
 class UsersFilter extends Component {
+	constructor(props) {
+		super(props);
+		this.toggle = this.toggle.bind(this);
+		this.state = { collapse: false };
+	}
+
+	toggle() {
+		this.setState((state) => ({ collapse: !state.collapse }));
+	}
+
 	static propTypes = {
 		selectedUsers: PropTypes.arrayOf(PropTypes.string).isRequired,
 		setSelectedUsers: PropTypes.func.isRequired
@@ -26,19 +36,24 @@ class UsersFilter extends Component {
 		const { users, selectedUsers } = this.props;
 		return (
 			<div>
-				{users.map(({ _id, profile: { fullName } }) => (
-					<FormGroup check key={_id}>
-						<Label check className="m-1">
-							<Input
-								type="checkbox"
-								value={_id}
-								checked={selectedUsers.includes(_id)}
-								onChange={(e) => this.onChange(_id, e.target.checked)}
-							/>
-							{fullName}
-						</Label>
-					</FormGroup>
-				))}
+				<Button color="link" onClick={this.toggle}>
+					{'Filter by users'}
+				</Button>
+				<Collapse isOpen={this.state.collapse}>
+					{users.map(({ _id, profile: { fullName } }) => (
+						<FormGroup check key={_id}>
+							<Label check className="m-1">
+								<Input
+									type="checkbox"
+									value={_id}
+									checked={selectedUsers.includes(_id)}
+									onChange={(e) => this.onChange(_id, e.target.checked)}
+								/>
+								{fullName}
+							</Label>
+						</FormGroup>
+					))}
+				</Collapse>
 			</div>
 		);
 	}

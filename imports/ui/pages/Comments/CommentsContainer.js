@@ -11,6 +11,7 @@ class CommentsContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isSubmitBtnHidden: true,
 			comments: [ { message: '' } ],
 			newComment: [ { message: '' } ]
 		};
@@ -41,6 +42,11 @@ class CommentsContainer extends Component {
 		this.setState({
 			newComment: { message: e.currentTarget.value }
 		});
+		if (e.currentTarget.value.length > 2) {
+			this.setState({ isSubmitBtnHidden: false });
+		} else {
+			this.setState({ isSubmitBtnHidden: true });
+		}
 	};
 
 	deleteComment = (comment) => {
@@ -63,6 +69,7 @@ class CommentsContainer extends Component {
 				handleTyping={this.handleTyping}
 				handleSubmit={this.handleSubmit}
 				deleteComment={this.deleteComment}
+				isSubmittable={this.state.isSubmitBtnHidden}
 			/>
 		);
 	}
@@ -77,7 +84,7 @@ export default compose(
 		const comments = CommentsCollection.find({ postId: currentPostId }).fetch();
 		const commentsWithUsers = comments.map((c) => {
 			const user = Meteor.users.findOne(c.userId);
-			return { ...c, commentator: user.profile.fullName };
+			return { ...c, commentator: user };
 		});
 
 		return {

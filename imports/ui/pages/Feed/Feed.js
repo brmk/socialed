@@ -6,16 +6,15 @@ import Comments from '../Comments';
 import uuid from 'uuid';
 import UsersFilter from './components/UsersFilter';
 
-const Feed = ({ posts, redirect, loading, page, postsCount, changePage, selectedUsers, setSelectedUsers }) => {
-	// if (loading) return <h1>...Loading</h1>
+const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUsers }) => {
 	return (
 		<div>
-			<Button onClick={redirect}>
-				<Link to="/new">New Post +</Link>
-			</Button>
+			<Link to="/new" className="btn btn-primary mt-3">
+				New Post
+			</Link>
 			<UsersFilter selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
-			<Card>
-				<CardHeader>
+			<Card style={{ backgroundColor: '#f8f9fa' }}>
+				<CardHeader style={{ backgroundColor: '#323A42', color: 'white' }}>
 					Page:{page} Count:{postsCount}
 				</CardHeader>
 				<CardBody id="postsList">

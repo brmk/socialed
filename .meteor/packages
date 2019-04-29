@@ -19,3 +19,5 @@ react-meteor-data       # React higher-order component for reactively tracking M
 accounts-base@1.4.3
 accounts-password@1.5.1
 reywood:publish-composite
+jparker:crypto-md5
+jparker:gravatar

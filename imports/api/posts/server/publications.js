@@ -22,7 +22,9 @@ publishComposite('posts', function({ page, selectedUsers }) {
 		children: [
 			{
 				find(post) {
-					return Meteor.users.find(post.userId, { fields: { 'profile.fullName': 1 } });
+					return Meteor.users.find(post.userId, {
+						fields: { 'profile.fullName': 1, emails: 1 }
+					});
 				}
 			}
 		]
