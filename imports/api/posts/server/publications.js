@@ -14,8 +14,7 @@ publishComposite('posts', function({ page, selectedUsers }) {
 					sort: {
 						createdAt: -1
 					},
-					limit: 10,
-					skip: (page - 1) * 10
+					limit: 10 * page
 				}
 			);
 		},
@@ -23,7 +22,7 @@ publishComposite('posts', function({ page, selectedUsers }) {
 			{
 				find(post) {
 					return Meteor.users.find(post.userId, {
-						fields: { 'profile.fullName': 1, emails: 1 }
+						fields: { 'profile.fullName': 1, emails: 1, username: 1 }
 					});
 				}
 			}

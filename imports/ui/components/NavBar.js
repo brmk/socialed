@@ -17,7 +17,6 @@ import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { toast } from 'react-toastify';
-import withMousePosition from '/imports/ui/hocs/withMousePosition';
 import { compose } from 'recompose';
 
 class NavBar extends React.Component {
@@ -55,13 +54,11 @@ class NavBar extends React.Component {
 									>
 										Profile
 									</DropdownItem>
-									{/* <DropdownItem>
-                    TODO: Option 2
-                    </DropdownItem> */}
 									<DropdownItem divider />
 									<DropdownItem
 										onClick={() => {
 											Meteor.logout();
+											this.props.history.push('/login');
 											toast.success('Successfully logged out');
 										}}
 									>

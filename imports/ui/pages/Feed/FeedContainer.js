@@ -60,15 +60,14 @@ class FeedContainer extends Component {
 
 	loadPage = () => {
 		const { page, setPage, selectedUsers } = this.props;
-		Meteor.subscribe('posts', { page, selectedUsers });
 		setPage(page + 1);
 		console.log('page number: ', page);
 		this.setState({ scrolling: false });
 	};
 
-	loadMore = _.throttle(() => {
+	loadMore = _.debounce(() => {
 		this.loadPage();
-	}, 1000);
+	}, 300);
 
 	render() {
 		const { loading, isLoggedIn } = this.props;
@@ -79,7 +78,6 @@ class FeedContainer extends Component {
 		if (!isLoggedIn) {
 			return <Redirect to="/login" />;
 		}
-		const posts = _.flatten(this.state.posts);
 		return <Feed {...this.props} redirect={this.redirect} changePage={this.loadPage} postsCount={postsCount} />;
 	}
 }

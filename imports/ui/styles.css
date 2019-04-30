@@ -13,5 +13,22 @@ body {
 }
 
 .btn-primary:hover {
-	background-color: rgb(35, 43, 51);
+	background-color: rgb(23, 29, 34);
+}
+
+.navbar-brand:hover {
+	cursor: pointer;
+}
+
+.username {
+	color: #657786;
+}
+
+.authorOfPost {
+	display: flex;
+}
+
+.authorOfPostNames {
+	display: flex;
+	flex-direction: column;
 }

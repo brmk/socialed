@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import { Card, CardText, CardBody, CardImg, Button, Form, Input, Collapse } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const Comment = ({ handleTyping, handleSubmit, comments, deleteComment, isSubmittable }) => {
 	function onKeyDown(e) {
@@ -40,14 +41,18 @@ const Comment = ({ handleTyping, handleSubmit, comments, deleteComment, isSubmit
 							<Card key={index} className="m-3">
 								<CardBody>
 									<CardText>
-										<CardImg
-											src={Gravatar.imageUrl(
-												Gravatar.hash(comment.commentator.emails[0].address),
-												options
-											)}
-											style={imageStyles}
-										/>
-										{comment.commentator.profile.fullName || comment.userId}
+										<Link to={`/profile/${comment.commentator.username}`}>
+											<CardImg
+												src={Gravatar.imageUrl(
+													Gravatar.hash(comment.commentator.emails[0].address),
+													options
+												)}
+												style={imageStyles}
+											/>
+										</Link>
+										<Link to={`/profile/${comment.commentator.username}`}>
+											{comment.commentator.profile.fullName || comment.userId}
+										</Link>
 										{': '}
 										{comment.message}
 									</CardText>

@@ -21,8 +21,8 @@ export default function App() {
 				<Switch>
 					<Route path="/" exact component={Feed} />
 					<Route path="/profile" exact component={Profile} />
+					<Route path="/profile/:username" component={Profile} />
 					<Route path="/new" exact component={PostForm} />
-					{/* <Route path="/login" exact component={SignIn} /> */}
 					<Route path="/register" exact render={(props) => <SignUp {...props} isLogin={false} />} />
 					<Route path="/login" exact render={(props) => <SignUp {...props} isLogin />} />
 					<Redirect from="/feed" to="/" />

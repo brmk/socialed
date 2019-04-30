@@ -12,5 +12,5 @@ Meteor.publish('users', function(userIds) {
 
 Meteor.publish('usersList', function() {
 	if (!this.userId) return this.ready();
-	return Meteor.users.find({}, { fields: { 'profile.fullName': 1 } });
+	return Meteor.users.find({}, { fields: { 'profile.fullName': 1, emails: 1, username: 1 } });
 });

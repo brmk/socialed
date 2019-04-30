@@ -9,13 +9,12 @@ import UsersFilter from './components/UsersFilter';
 const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUsers }) => {
 	return (
 		<div>
-			<Link to="/new" className="btn btn-primary mt-3">
+			<Link to="/new" className="btn btn-primary mt-1 mb-1">
 				New Post
 			</Link>
-			<UsersFilter selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
 			<Card style={{ backgroundColor: '#f8f9fa' }}>
 				<CardHeader style={{ backgroundColor: '#323A42', color: 'white' }}>
-					Page:{page} Count:{postsCount}
+					<UsersFilter selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
 				</CardHeader>
 				<CardBody id="postsList">
 					{posts.map((post, index) => (

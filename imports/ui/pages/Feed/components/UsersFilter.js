@@ -40,7 +40,7 @@ class UsersFilter extends Component {
 					{'Filter by users'}
 				</Button>
 				<Collapse isOpen={this.state.collapse}>
-					{users.map(({ _id, profile: { fullName } }) => (
+					{users.map(({ _id, username }) => (
 						<FormGroup check key={_id}>
 							<Label check className="m-1">
 								<Input
@@ -49,7 +49,7 @@ class UsersFilter extends Component {
 									checked={selectedUsers.includes(_id)}
 									onChange={(e) => this.onChange(_id, e.target.checked)}
 								/>
-								{fullName}
+								{username}
 							</Label>
 						</FormGroup>
 					))}
@@ -64,7 +64,7 @@ export default compose(
 		const handlers = [ Meteor.subscribe('usersList') ];
 
 		return {
-			users: Meteor.users.find({}, { sort: { 'profile.fullName': 1 } }).fetch()
+			users: Meteor.users.find({}, { sort: { username: 1 } }).fetch()
 		};
 	})
 )(UsersFilter);
