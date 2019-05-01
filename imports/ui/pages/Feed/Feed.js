@@ -6,7 +6,7 @@ import Comments from '../Comments';
 import uuid from 'uuid';
 import UsersFilter from './components/UsersFilter';
 
-const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUsers }) => {
+const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUsers, handleFollow, subscriptions }) => {
 	return (
 		<div>
 			<Link to="/new" className="btn btn-primary mt-1 mb-1">
@@ -20,7 +20,12 @@ const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUser
 					{posts.map((post, index) => (
 						<Card key={index}>
 							<CardBody>
-								<Post {...post} key={post._id} />
+								<Post
+									{...post}
+									key={post._id}
+									handleFollow={handleFollow}
+									subscriptions={subscriptions}
+								/>
 								<Comments key={uuid()} currentPostId={post._id} />
 							</CardBody>
 						</Card>

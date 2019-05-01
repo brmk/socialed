@@ -1,9 +1,10 @@
 import React from 'react';
-import { Card, CardHeader, CardImg, CardText, CardBody, Button, CardSubtitle } from 'reactstrap';
+import { Meteor } from 'meteor/meteor';
+import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-const Post = ({ userId, body, createdAt, id, author }) => {
+const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions }) => {
 	const email = Gravatar.hash(author.emails[0].address);
 	const options = {
 		secure: true,
@@ -32,13 +33,19 @@ const Post = ({ userId, body, createdAt, id, author }) => {
 							@{author.username}
 						</Link>
 					</span>
+					{author._id !== Meteor.userId() ? (
+						<Button className="btn btn-follow ml-auto" onClick={() => handleFollow(author._id)}>
+							{subscriptions[0].following.includes(author._id) ? 'Unfollow' : 'Follow'}
+						</Button>
+					) : null}
 				</p>
 				<p className="m-3">{body}</p>
 				<p>
-					<i color="text-muted">{moment(createdAt).startOf('day').fromNow()}</i>
+					<i color="text-muted">{moment(createdAt).fromNow()}</i>
 				</p>
 			</div>
 		</div>
 	);
 };
+
 export default Post;

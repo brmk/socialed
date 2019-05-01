@@ -5,11 +5,11 @@ import PostsCollection from '../collection';
 Meteor.methods({
 	'posts.insert': function({ body }) {
 		if (!this.userId) {
-			throw Meteor.Error('Not authorized');
+			throw new Meteor.Error('Not authorized');
 		}
 
 		if (typeof body !== 'string' || body.length <= 5) {
-			throw Meteor.Error('Post should be longer than 5 characters');
+			throw new Meteor.Error('Post should be longer than 5 characters');
 		}
 
 		const _id = PostsCollection.insert({
@@ -23,7 +23,7 @@ Meteor.methods({
 
 	'posts.count'({ selectedUsers }) {
 		if (!this.userId) {
-			throw Meteor.Error('Not authorized');
+			throw new Meteor.Error('Not authorized');
 		}
 
 		return PostsCollection.find({
@@ -33,18 +33,18 @@ Meteor.methods({
 
 	'posts.clear'() {
 		if (!this.userId) {
-			throw Meteor.Error('Not authorized');
+			throw new Meteor.Error('Not authorized');
 		}
 
 		if (!Meteor.users.findOne(this.userId).isAdmin) {
-			throw Meteor.Error('Access Denied!');
+			throw new Meteor.Error('Access Denied!');
 		}
 		PostsCollection.remove({});
 	},
 
 	'posts.populate'(number = 10) {
 		if (!this.userId) {
-			throw Meteor.Error('Not authorized');
+			throw new Meteor.Error('Not authorized');
 		}
 
 		const userIds = Meteor.users.find().map((u) => u._id);

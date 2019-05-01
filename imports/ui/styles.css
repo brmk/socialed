@@ -32,3 +32,8 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+.btn-follow {
+	height: 30%;
+	font-size: 0.7rem;
+}

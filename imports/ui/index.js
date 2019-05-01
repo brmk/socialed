@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import AppLayout from './layout/AppLayout';
 import { ToastContainer } from 'react-toastify';
 
-// import Feed from "./pages/Feed";
-// import PostForm from "./pages/PostForm"
 import { Feed, Profile, PostForm, NotFound, SignUp, SignIn } from './pages';
 
 import 'react-toastify/dist/ReactToastify.css';

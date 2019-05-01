@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import Feed from './Feed';
 import PostsCollection from '/imports/api/posts/collection';
+import Subscriptions from '/imports/api/subscriptions/collection';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Redirect } from 'react-router-dom';
 import { compose, withState } from 'recompose';
+import { toast } from 'react-toastify';
 
 const POSTS_PER_PAGE = 10;
 class FeedContainer extends Component {
@@ -69,6 +71,18 @@ class FeedContainer extends Component {
 		this.loadPage();
 	}, 300);
 
+	handleFollow = (following) => {
+		const follow = { following, follower: Meteor.userId() };
+		Meteor.call('subscription.follow', follow, (error, pushed) => {
+			if (error) {
+				toast.error('Following is not avaible at the moment');
+				console.log(error.message);
+			} else {
+				// toast.success(pushed ? 'Followed' : 'Unfollowed');
+			}
+		});
+	};
+
 	render() {
 		const { loading, isLoggedIn } = this.props;
 		const { postsCount } = this.state;
@@ -78,7 +92,16 @@ class FeedContainer extends Component {
 		if (!isLoggedIn) {
 			return <Redirect to="/login" />;
 		}
-		return <Feed {...this.props} redirect={this.redirect} changePage={this.loadPage} postsCount={postsCount} />;
+		return (
+			<Feed
+				{...this.props}
+				redirect={this.redirect}
+				changePage={this.loadPage}
+				postsCount={postsCount}
+				handleFollow={this.handleFollow}
+				subscriptions={this.props.subscriptions}
+			/>
+		);
 	}
 }
 
@@ -89,7 +112,7 @@ export default compose(
 	withTracker((props) => {
 		const { page, selectedUsers, isInitialLoading, setIsInitialLoading } = props;
 
-		const handlers = [ Meteor.subscribe('posts', { page, selectedUsers }) ];
+		const handlers = [ Meteor.subscribe('posts', { page, selectedUsers }), Meteor.subscribe('subscriptions') ];
 
 		const posts = PostsCollection.find().fetch();
 
@@ -97,6 +120,8 @@ export default compose(
 			const user = Meteor.users.findOne(p.userId);
 			return { ...p, author: user };
 		});
+
+		const subscriptions = Subscriptions.find().fetch();
 
 		let loading = Meteor.loggingIn() || handlers.some((h) => !h.ready());
 		if (!isInitialLoading) {
@@ -109,6 +134,7 @@ export default compose(
 
 		return {
 			posts: postsWithUsers,
+			subscriptions,
 			user: Meteor.user(),
 			loading,
 			isLoggedIn: !Meteor.loggingIn() && Meteor.userId()
