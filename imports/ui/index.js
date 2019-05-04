@@ -6,11 +6,12 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import AppLayout from './layout/AppLayout';
 import { ToastContainer } from 'react-toastify';
 
-import { Feed, Profile, PostForm, NotFound, SignUp, SignIn } from './pages';
+import { Feed, Profile, PostForm, NotFound, SignUp, Followers, Subscriptions } from './pages';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 import './styles.css';
+import { Meteor } from 'meteor/meteor';
 
 export default function App() {
 	return (
@@ -19,6 +20,8 @@ export default function App() {
 				<Switch>
 					<Route path="/" exact component={Feed} />
 					<Route path="/profile" exact component={Profile} />
+					<Route path="/followers" exact component={Followers} />
+					<Route path="/subscriptions" exact component={Subscriptions} />
 					<Route path="/profile/:username" component={Profile} />
 					<Route path="/new" exact component={PostForm} />
 					<Route path="/register" exact render={(props) => <SignUp {...props} isLogin={false} />} />

@@ -42,6 +42,12 @@ class NavBar extends React.Component {
 					<NavbarToggler onClick={this.toggle} />
 					<Collapse isOpen={this.state.isOpen} navbar>
 						<Nav className="ml-auto" navbar>
+							<NavItem>
+								<NavLink href="/followers">Followers</NavLink>
+							</NavItem>
+							<NavItem>
+								<NavLink href="/subscriptions">Subscriptions</NavLink>
+							</NavItem>
 							<UncontrolledDropdown nav inNavbar>
 								<DropdownToggle disabled={!this.props.isLoggedIn} nav caret>
 									{this.props.isLoggedIn ? this.props.user.profile.fullName : 'Not logged in'}

@@ -77,8 +77,6 @@ class FeedContainer extends Component {
 			if (error) {
 				toast.error('Following is not avaible at the moment');
 				console.log(error.message);
-			} else {
-				// toast.success(pushed ? 'Followed' : 'Unfollowed');
 			}
 		});
 	};

@@ -50,7 +50,6 @@ class CommentsContainer extends Component {
 	};
 
 	deleteComment = (comment) => {
-		console.log(comment);
 		if (Meteor.userId() === comment.userId) {
 			Meteor.call('comments.remove', comment._id, (error) => {
 				if (error) {
