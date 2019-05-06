@@ -63,7 +63,6 @@ class FeedContainer extends Component {
 	loadPage = () => {
 		const { page, setPage, selectedUsers } = this.props;
 		setPage(page + 1);
-		console.log('page number: ', page);
 		this.setState({ scrolling: false });
 	};
 
@@ -112,8 +111,7 @@ export default compose(
 
 		const handlers = [ Meteor.subscribe('posts', { page, selectedUsers }), Meteor.subscribe('subscriptions') ];
 
-		const posts = PostsCollection.find().fetch();
-
+		const posts = PostsCollection.find({}, { sort: { createdAt: -1 } }).fetch();
 		const postsWithUsers = posts.map((p) => {
 			const user = Meteor.users.findOne(p.userId);
 			return { ...p, author: user };

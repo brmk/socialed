@@ -37,16 +37,30 @@ class NavBar extends React.Component {
 			<Navbar color="light" light expand="md">
 				<Container>
 					<NavbarBrand onClick={() => this.props.history.push('/')}>
-						<img src="/socialed-logo.png" height="50" />
+						<img src="/socialed-logo.png" height="50" className="cursor-pointer" />
 					</NavbarBrand>
 					<NavbarToggler onClick={this.toggle} />
 					<Collapse isOpen={this.state.isOpen} navbar>
 						<Nav className="ml-auto" navbar>
 							<NavItem>
-								<NavLink href="/followers">Followers</NavLink>
+								<NavLink
+									onClick={() => {
+										this.props.history.push('/followers');
+									}}
+									href="#"
+								>
+									Followers
+								</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink href="/subscriptions">Subscriptions</NavLink>
+								<NavLink
+									onClick={() => {
+										this.props.history.push('/subscriptions');
+									}}
+									href="#"
+								>
+									Subscriptions
+								</NavLink>
 							</NavItem>
 							<UncontrolledDropdown nav inNavbar>
 								<DropdownToggle disabled={!this.props.isLoggedIn} nav caret>

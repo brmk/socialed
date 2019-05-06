@@ -16,7 +16,7 @@ body {
 	background-color: rgb(23, 29, 34);
 }
 
-.navbar-brand:hover {
+.cursor-pointer:hover {
 	cursor: pointer;
 }
 
@@ -34,6 +34,6 @@ body {
 }
 
 .btn-follow {
-	height: 30%;
+	height: 30px;
 	font-size: 0.7rem;
 }
