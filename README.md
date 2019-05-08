@@ -19,8 +19,8 @@
 #### DONE - As a user, I can paginate between posts
 #### DONE - As a user I can add a new post
 #### DONE - As a user, I can filter the list of posts to see only posts created by users I follow
-#### DONE As a user, I can comment other user's post
-#### As a user, I can attach an image to the post (ostrio:files)
+#### DONE - As a user, I can comment other user's post
+#### DONE - As a user, I can attach an image to the post (ostrio:files)
 
 ### Chat
 

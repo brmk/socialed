@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions }) => {
+const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions, imagesLinks }) => {
 	const email = Gravatar.hash(author.emails[0].address);
 	const options = {
 		secure: true,
@@ -40,6 +40,20 @@ const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions
 					) : null}
 				</p>
 				<p className="m-3">{body}</p>
+				{imagesLinks ? (
+					imagesLinks.map((imageLink, index) => (
+						<p className="d-flex" key={index}>
+							<img
+								src={`http://localhost:3000/files/Images/${imageLink.id}/original/${imageLink.id}${imageLink.ext}`}
+								className="mb-1 ml-auto mr-auto"
+								style={{ maxHeight: '25rem' }}
+								alt=" "
+							/>
+						</p>
+					))
+				) : (
+					''
+				)}
 				<p>
 					<i color="text-muted">{moment(createdAt).fromNow()}</i>
 				</p>

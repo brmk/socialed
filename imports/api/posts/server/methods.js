@@ -3,7 +3,7 @@ import faker from 'faker';
 import PostsCollection from '../collection';
 
 Meteor.methods({
-	'posts.insert': function({ body }) {
+	'posts.insert': function({ body, imagesLinks }) {
 		if (!this.userId) {
 			throw new Meteor.Error('Not authorized');
 		}
@@ -14,6 +14,7 @@ Meteor.methods({
 
 		const _id = PostsCollection.insert({
 			body,
+			imagesLinks,
 			userId: this.userId,
 			createdAt: new Date()
 		});

@@ -9,3 +9,6 @@ import '/imports/api/comments/server/publications';
 
 import '/imports/api/subscriptions/server/methods';
 import '/imports/api/subscriptions/server/publications';
+
+import '/imports/api/images/server/methods';
+import '/imports/api/images/server/publications';
