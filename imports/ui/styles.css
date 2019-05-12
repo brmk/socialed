@@ -35,5 +35,11 @@ body {
 
 .btn-follow {
 	height: 30px;
+	width: 70px;
 	font-size: 0.7rem;
+}
+
+.active {
+	background: #b8d6f5 !important;
+	border: none;
 }

@@ -5,7 +5,7 @@
 ### Users
 
 #### DONE - As a guest, I can create an account
-#### As a user, I can see a list of users on a Users page
+#### DONE - As a user, I can see a list of users on a Users page
 #### DONE - As a user, I can follow a user
 #### DONE - As a user, I can filter a list of the users, so that I see only users that I follow
 #### DONE - As a user, I can filter a list of the users, so that I see only users that follow me

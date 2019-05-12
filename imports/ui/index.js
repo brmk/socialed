@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import AppLayout from './layout/AppLayout';
 import { ToastContainer } from 'react-toastify';
 
-import { Feed, Profile, PostForm, NotFound, SignUp, Followers, Subscriptions } from './pages';
+import { Feed, Profile, PostForm, NotFound, SignUp, Followers, Subscriptions, Users } from './pages';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -21,6 +21,7 @@ export default function App() {
 					<Route path="/" exact component={Feed} />
 					<Route path="/profile" exact component={Profile} />
 					<Route path="/followers" exact component={Followers} />
+					<Route path="/users" exact component={Users} />
 					<Route path="/subscriptions" exact component={Subscriptions} />
 					<Route path="/profile/:username" component={Profile} />
 					<Route path="/new" exact component={PostForm} />

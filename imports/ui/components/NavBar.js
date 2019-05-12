@@ -45,6 +45,16 @@ class NavBar extends React.Component {
 							<NavItem>
 								<NavLink
 									onClick={() => {
+										this.props.history.push('/users');
+									}}
+									href="#"
+								>
+									Users
+								</NavLink>
+							</NavItem>
+							<NavItem>
+								<NavLink
+									onClick={() => {
 										this.props.history.push('/followers');
 									}}
 									href="#"
