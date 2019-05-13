@@ -3,8 +3,9 @@ import { Meteor } from 'meteor/meteor';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import Linkify from 'react-linkify';
 
-const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions, imagesLinks }) => {
+const Post = ({ userId, body, createdAt, _id, author, handleFollow, handleDelete, subscriptions, imagesLinks }) => {
 	const email = Gravatar.hash(author.emails[0].address);
 	const options = {
 		secure: true,
@@ -19,7 +20,7 @@ const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions
 	};
 
 	return (
-		<div className="ml-2 mb-5" id={id}>
+		<div className="ml-2 mb-5" id={_id}>
 			<div>
 				<p className="authorOfPost">
 					<Link to={`/profile/${author.username}`}>
@@ -39,7 +40,9 @@ const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions
 						</Button>
 					) : null}
 				</p>
-				<p className="m-3">{body}</p>
+				<Linkify>
+					<p className="m-3">{body}</p>
+				</Linkify>
 				{imagesLinks ? (
 					imagesLinks.map((imageLink, index) => (
 						<p className="d-flex" key={index}>
@@ -57,6 +60,11 @@ const Post = ({ userId, body, createdAt, id, author, handleFollow, subscriptions
 				<p>
 					<i color="text-muted">{moment(createdAt).fromNow()}</i>
 				</p>
+				{author._id === Meteor.userId() ? (
+					<Button className="btn btn-danger" onClick={() => handleDelete(_id)}>
+						Delete
+					</Button>
+				) : null}
 			</div>
 		</div>
 	);

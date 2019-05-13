@@ -21,6 +21,15 @@ Meteor.methods({
 
 		return _id;
 	},
+	'post.delete': function(id) {
+		if (!this.userId) {
+			throw new Meteor.Error('Not authorized');
+		}
+
+		const _id = PostsCollection.remove(id);
+
+		return _id;
+	},
 
 	'posts.count'({ selectedUsers }) {
 		if (!this.userId) {

@@ -80,6 +80,17 @@ class FeedContainer extends Component {
 		});
 	};
 
+	handleDelete = (id) => {
+		if (confirm('Delete this post?')) {
+			Meteor.call('post.delete', id, (error) => {
+				if (error) {
+					toast.error("Can't delete this post");
+					console.log(error.message);
+				}
+			});
+		}
+	};
+
 	render() {
 		const { loading, isLoggedIn } = this.props;
 		const { postsCount } = this.state;
@@ -96,6 +107,7 @@ class FeedContainer extends Component {
 				changePage={this.loadPage}
 				postsCount={postsCount}
 				handleFollow={this.handleFollow}
+				handleDelete={this.handleDelete}
 				subscriptions={this.props.subscriptions}
 			/>
 		);

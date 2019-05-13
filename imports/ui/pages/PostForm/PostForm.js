@@ -22,8 +22,8 @@ const PostForm = ({ handleSubmit, imagesLinks, validBody, onChangeBody, uploadIt
 				{imagesLinks && imagesLinks.length ? (
 					<p className="d-flex">
 						<img
-							src={`http://localhost:3000/files/Images/${imagesLinks[0].id}/original/${props
-								.imagesLinks[0].id}${imagesLinks[0].ext}`}
+							src={`http://localhost:3000/files/Images/${imagesLinks[0].id}/original/${imagesLinks[0]
+								.id}${imagesLinks[0].ext}`}
 							style={{ maxHeight: '300px' }}
 							className="ml-auto mr-auto"
 						/>

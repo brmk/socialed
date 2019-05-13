@@ -6,7 +6,17 @@ import Comments from '../Comments';
 import uuid from 'uuid';
 import UsersFilter from './components/UsersFilter';
 
-const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUsers, handleFollow, subscriptions }) => {
+const Feed = ({
+	posts,
+	loading,
+	page,
+	postsCount,
+	selectedUsers,
+	setSelectedUsers,
+	handleFollow,
+	handleDelete,
+	subscriptions
+}) => {
 	return (
 		<div>
 			<Link to="/new" className="btn btn-primary mt-1 mb-1">
@@ -24,6 +34,7 @@ const Feed = ({ posts, loading, page, postsCount, selectedUsers, setSelectedUser
 									{...post}
 									key={post._id}
 									handleFollow={handleFollow}
+									handleDelete={handleDelete}
 									subscriptions={subscriptions}
 								/>
 								<Comments key={uuid()} currentPostId={post._id} />
